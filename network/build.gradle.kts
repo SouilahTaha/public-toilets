@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-  namespace = "com.taha.design_system"
+  namespace = "com.taha.network"
   compileSdk = 35
 
   defaultConfig {
@@ -34,9 +34,14 @@ android {
 
 dependencies {
 
+  api(project(":data"))
+
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
-  implementation(libs.androidx.material3)
+  implementation(libs.hilt.android)
+  implementation(libs.retrofit)
+  implementation(libs.retrofit.converter.gson)
+
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
