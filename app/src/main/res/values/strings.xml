@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">public toilets</string>
+    <string name="back">back</string>
+    <string name="error_retry">Une erreur est survenue. Veuillez réessayez plus tard</string>
+</resources>
