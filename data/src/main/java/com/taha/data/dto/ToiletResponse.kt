@@ -4,16 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class ToiletResponse(
-    val parameters: Parameters,
     val records: List<Record>
-)
-
-data class Parameters(
-    val dataset: String,
-    val rows: Int,
-    val start: Int,
-    val format: String,
-    val timezone: String
 )
 
 data class Record(
@@ -48,37 +39,3 @@ data class Geometry(
     val type: String,
     val coordinates: List<Double>
 )
-
-// Mapped Data Class for UI
-
-data class Toilet(
-    val id: String,
-    val latitude: Double,
-    val longitude: Double,
-    val address: String,
-    val name: String,
-    val schedule: String,
-    val isAccessible: String,
-    val arrondissement: Int,
-    val babyArea: String? = null
-)
-
-// Mapper Function
-
-fun Record.toToilet(): Toilet {
-    return Toilet(
-        id = recordId,
-        latitude = fields.geoPoint2d[0],
-        longitude = fields.geoPoint2d[1],
-        address = fields.adresse,
-        name = fields.gestionnaire,
-        schedule = fields.horaire,
-        isAccessible = fields.accesPmr,
-        arrondissement = fields.arrondissement,
-        babyArea = fields.relaisBebe
-    )
-}
-
-fun List<Record>.toToilets(): List<Toilet> {
-    return this.map { it.toToilet() }
-}

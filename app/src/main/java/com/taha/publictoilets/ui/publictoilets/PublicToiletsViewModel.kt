@@ -3,11 +3,14 @@ package com.taha.publictoilets.ui.publictoilets
 import PublicToiletsUiEvent
 import PublicToiletsUiState
 import ViewType
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.taha.data.dto.Toilet
+import com.taha.domain.entities.ToiletEntity
+import com.taha.domain.usecase.GetPublicToiletsUseCase
+import com.taha.publictoilets.extenstions.toLatLng
 import com.taha.publictoilets.uimodel.PublicToiletUiModel
-import com.taha.publictoilets.uimodel.publicToiletsUiModelMock
+import com.taha.publictoilets.uimodel.mapper.toPublicToiletsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +23,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PublicToiletsViewModel @Inject constructor(
-  //private val getToiletsUseCase: GetPublicToiletsUseCase
+  private val getToiletsUseCase: GetPublicToiletsUseCase
 ) : ViewModel() {
 
+  private var originalToiletsList = emptyList<PublicToiletUiModel>()
   private val publicToiletsUiState = MutableStateFlow<PublicToiletsUiState>(PublicToiletsUiState.Loading)
   internal fun getPublicToiletsUiState(): StateFlow<PublicToiletsUiState> = publicToiletsUiState.asStateFlow()
 
@@ -33,12 +37,13 @@ class PublicToiletsViewModel @Inject constructor(
     getToilets()
   }
 
-  private fun getToilets() {
+  internal fun getToilets() {
     viewModelScope.launch {
-      val result: Result<List<PublicToiletUiModel>> = Result.success(publicToiletsUiModelMock)//getToiletsUseCase()
+      val result: Result<List<ToiletEntity>> = getToiletsUseCase()
       when (result.isSuccess) {
         true -> {
-          publicToiletsUiState.value = PublicToiletsUiState.Success(toilets = result.getOrNull() ?: emptyList())
+          originalToiletsList = result.getOrNull()?.toPublicToiletsUiModel() ?: emptyList()
+          publicToiletsUiState.value = PublicToiletsUiState.Success(toilets = originalToiletsList)
         }
 
         false -> {
@@ -48,13 +53,22 @@ class PublicToiletsViewModel @Inject constructor(
     }
   }
 
+  internal fun filterPublicToilets(isPublicFilterEnabled: Boolean) {
+    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("")
+    val filteredList = if (isPublicFilterEnabled) {
+      originalToiletsList.filter { it.isPrmAccessible }
+    } else {
+      originalToiletsList
+    }
+    publicToiletsUiState.update {
+      currentState.copy(toilets = filteredList)
+    }
+  }
 
-
-  /*
-      fun updateLocation(latLng: LatLng) {
-          currentState.update { it.copy(userLocation = latLng) }
-      }
-  */
+  internal fun updateLocation(location: Location) {
+    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: return
+    publicToiletsUiState.update { currentState.copy(userLocation = location.toLatLng()) }
+  }
 
   internal fun changeView(viewType: ViewType) {
     val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("")

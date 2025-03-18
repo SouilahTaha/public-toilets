@@ -4,7 +4,7 @@ import com.taha.data.api.ApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://data.ratp.fr/api/records/1.0"
+private const val BASE_URL = "https://data.ratp.fr/"
 
 private val retrofit: Retrofit
   get() = Retrofit.Builder()

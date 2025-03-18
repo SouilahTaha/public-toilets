@@ -1,9 +1,10 @@
-package com.taha.publictoilets.ui.publictoilets
+package com.taha.publictoilets
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.taha.design_system.theme.PublicToiletsTheme
+import com.taha.publictoilets.navigation.ProjectsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

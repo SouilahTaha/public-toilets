@@ -19,6 +19,7 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    manifestPlaceholders["mapsApiKey"] = project.properties["MAPS_API_KEY"] ?: ""
   }
 
   buildTypes {
@@ -48,13 +49,14 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.core.splashscreen)
   implementation(libs.hilt.android)
+  implementation(libs.play.services.location)
   ksp(libs.hilt.compiler)
   implementation(libs.androidx.hilt.navigation.compose)
   implementation(libs.androidx.material3)
   implementation(libs.androidx.material.icons.extended)
   implementation(libs.androidx.ui.tooling.preview.android)
-
   implementation(libs.play.services.maps)
+  implementation(libs.maps.compose)
 
   testImplementation(libs.junit)
 

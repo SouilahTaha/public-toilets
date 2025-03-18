@@ -6,6 +6,8 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-  @GET("/search")
-  suspend fun getToilets(@Query("dataset") one: String = "sanisettesparis2011"): List<ToiletResponse>
+  @GET("api/records/1.0/search")
+  suspend fun getToilets(
+    @Query("dataset") rows: String = "sanisettesparis2011"
+  ): ToiletResponse
 }

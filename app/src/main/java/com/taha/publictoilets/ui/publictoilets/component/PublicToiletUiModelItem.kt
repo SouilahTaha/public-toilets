@@ -53,6 +53,7 @@ internal fun PublicToiletUiModelItem(toilet: PublicToiletUiModel) {
         Spacer(modifier = Modifier.size(VerySmallPadding))
         Distance(toilet.distance)
       }
+      Spacer(modifier = Modifier.size(VerySmallPadding))
       ItineraryButton(onClick = {
         context.openMap(
           latitude = toilet.location.latitude,

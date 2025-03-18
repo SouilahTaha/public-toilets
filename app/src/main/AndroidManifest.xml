@@ -17,8 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PublicToilets"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCNKX-3xwGFWvLn0oXLS-kQmRVcVQZg2Ac"/>
         <activity
-            android:name=".ui.publictoilets.PublicToiletsActivity"
+            android:name=".PublicToiletsActivity"
             android:exported="true"
             android:theme="@style/Theme.PublicToilets">
             <intent-filter>
