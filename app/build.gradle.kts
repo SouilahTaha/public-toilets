@@ -1,6 +1,10 @@
 plugins {
+  id("kotlin-kapt")
+  alias(libs.plugins.hilt)
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
+  alias(libs.plugins.compose)
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -37,15 +41,19 @@ android {
 
 dependencies {
 
-  api(project(":design-system"))
   api(project(":domain"))
+  api(project(":data"))
+  api(project(":design-system"))
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.core.splashscreen)
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
   implementation(libs.androidx.hilt.navigation.compose)
   implementation(libs.androidx.material3)
-  implementation(libs.hilt.android)
-  implementation(libs.hilt.compiler)
+  implementation(libs.androidx.material.icons.extended)
+  implementation(libs.androidx.ui.tooling.preview.android)
+
   implementation(libs.play.services.maps)
 
   testImplementation(libs.junit)

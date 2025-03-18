@@ -15,7 +15,7 @@ import com.taha.design_system.theme.LargePadding
 import com.taha.publictoilets.R
 
 @Composable
-fun Error() =
+internal fun Error() =
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.Center,

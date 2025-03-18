@@ -10,11 +10,11 @@ import androidx.navigation.compose.rememberNavController
 fun ProjectsNavHost(navController: NavHostController = rememberNavController()) =
     NavHost(
         navController = navController,
-        startDestination = PublicToiletsDestinations.PROJECTS_LIST.path
+        startDestination = PublicToiletsDestinations.PUBLIC_TOILETS.path
     ) {
         composable(
-            route = PublicToiletsDestinations.PROJECTS_LIST.path
+            route = PublicToiletsDestinations.PUBLIC_TOILETS.path
         ) {
-            ProjectsScreen()
+            PublicToiletsScreen()
         }
     }

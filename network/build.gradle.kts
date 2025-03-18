@@ -1,6 +1,9 @@
 plugins {
+  id("kotlin-kapt")
+  alias(libs.plugins.hilt)
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.android)
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,7 +12,6 @@ android {
 
   defaultConfig {
     minSdk = 24
-
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
   }
@@ -39,6 +41,8 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.hilt.android)
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
   implementation(libs.retrofit)
   implementation(libs.retrofit.converter.gson)
 

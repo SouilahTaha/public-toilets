@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.taha.design_system.theme.LoaderSize
 
 @Composable
-fun Loader() =
+internal fun Loader() =
   Box(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center

@@ -13,7 +13,6 @@ kotlin {
 }
 
 dependencies {
-  api(project(":network"))
   implementation(libs.javax.inject)
   testImplementation(libs.junit)
   testImplementation(libs.mockk)
