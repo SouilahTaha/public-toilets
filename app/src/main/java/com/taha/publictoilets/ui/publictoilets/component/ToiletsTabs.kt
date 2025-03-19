@@ -1,6 +1,5 @@
 package com.taha.publictoilets.ui.publictoilets.component
 
-import ViewType
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.taha.design_system.theme.SmallPadding
+import com.taha.publictoilets.ui.publictoilets.ViewType
 
 @Composable
 internal fun ToiletsTabs(

@@ -1,8 +1,5 @@
 package com.taha.publictoilets.ui.publictoilets
 
-import ToiletsUiEvent
-import ToiletsUiState
-import ViewType
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val FIRST_TOILETS_PAGE = 1
+private const val STATE_TYPE_EXCEPTION =  "state should be success"
 
 @HiltViewModel
 class ToiletsViewModel @Inject constructor(
@@ -53,7 +51,7 @@ class ToiletsViewModel @Inject constructor(
   }
 
   internal fun loadMore() {
-    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception("state should be success")
+    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception(STATE_TYPE_EXCEPTION)
     if (!currentState.canPaginate) return
     viewModelScope.launch {
       val result: Result<List<ToiletEntity>> = getToiletsUseCase(page = currentState.page)
@@ -67,7 +65,7 @@ class ToiletsViewModel @Inject constructor(
   }
 
   internal fun filterToilets(isFilterEnabled: Boolean) {
-    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception("state should be success")
+    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception(STATE_TYPE_EXCEPTION)
     val filteredList = if (isFilterEnabled) {
       originalToiletsList.filter { it.isPrmAccessible }
     } else {
@@ -84,7 +82,7 @@ class ToiletsViewModel @Inject constructor(
   }
 
   internal fun changeView(viewType: ViewType) {
-    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception("state should be success")
+    val currentState = toiletsUiState.value as? ToiletsUiState.Success ?: throw Exception(STATE_TYPE_EXCEPTION)
     toiletsUiState.update {
       currentState.copy(viewType = viewType)
     }
