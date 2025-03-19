@@ -1,5 +1,29 @@
 <resources>
-    <string name="app_name">public toilets</string>
-    <string name="back">back</string>
-    <string name="error_retry">Une erreur est survenue. Veuillez réessayez plus tard</string>
+  <!--Generic Section-->
+  <string name="app_name">Paris public toilets</string>
+  <string name="error_retry">An error has occurred. Please try again later.</string>
+  <string name="retry_icon_description">@string/error_retry</string>
+
+  <!--Public Toilets Screen Section-->
+  <string name="public_toilets_title">Public toilets in Paris</string>
+  <string name="public_toilets_list_tab_label">List</string>
+  <string name="public_toilets_map_tab_label">Map</string>
+  <string name="public_toilets_location_permission_denied_error_text">Location permission denied</string>
+  <string name="public_toilets_your_position_title">Your position</string>
+  <string name="public_toilets_your_position_description">You are here</string>
+  <string name="public_toilets_empty_list_illustration">empty list illustration</string>
+  <string name="public_toilets_empty_list_message">No data found</string>
+
+  <!--Public Toilet item Section-->
+  <string name="public_toilet_item_accessible_text">PRM Accessible</string>
+  <string name="public_toilet_item_not_accessible_text">Not PRM Accessible</string>
+  <string name="public_toilet_item_opening_hours_prefix_text">Opening Hours: %1$s</string>
+  <string name="public_toilets_item_distance_prefix_text">Distance: %1$s</string>
+  <string name="public_toilet_item_itinerary_text">Itinerary</string>
+  <string name="public_toilet_item_itinerary_description">Itinerary</string>
+
+  <!--Configuration Section-->
+  <string name="configuration_bottom_sheet_accessible_filter_default_label">PRM Accessible</string>
+  <string name="configuration_bottom_sheet_accessible_filter_selected_label">PRM Accessible selected</string>
+  <string name="public_toilets_your_position_marker_content_description">Your position\'s marker</string>
 </resources>

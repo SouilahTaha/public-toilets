@@ -1,53 +1,65 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+  id("kotlin-kapt")
+  alias(libs.plugins.hilt)
+  alias(libs.plugins.android.application)
+  alias(libs.plugins.kotlin.android)
+  alias(libs.plugins.compose)
+  alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.taha.publictoilets"
-    compileSdk = 35
+  namespace = "com.taha.publictoilets"
+  compileSdk = 35
 
-    defaultConfig {
-        applicationId = "com.taha.publictoilets"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+  defaultConfig {
+    applicationId = "com.taha.publictoilets"
+    minSdk = 24
+    targetSdk = 35
+    versionCode = 1
+    versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    manifestPlaceholders["mapsApiKey"] = project.properties["MAPS_API_KEY"] ?: ""
+  }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+  buildTypes {
+    release {
+      isMinifyEnabled = false
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro"
+      )
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+  }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = "11"
+  }
 }
 
 dependencies {
 
-    api(project(":design-system"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.material3)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.compiler)
+  api(project(":domain"))
+  api(project(":data"))
+  api(project(":design-system"))
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.androidx.core.splashscreen)
+  implementation(libs.hilt.android)
+  implementation(libs.play.services.location)
+  ksp(libs.hilt.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
+  implementation(libs.androidx.material3)
+  implementation(libs.androidx.material.icons.extended)
+  implementation(libs.androidx.ui.tooling.preview.android)
+  implementation(libs.play.services.maps)
+  implementation(libs.maps.compose)
 
-    testImplementation(libs.junit)
+  testImplementation(libs.junit)
 
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+  androidTestImplementation(libs.androidx.junit)
+  androidTestImplementation(libs.androidx.espresso.core)
 }
