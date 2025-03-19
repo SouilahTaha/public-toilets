@@ -1,9 +1,9 @@
-package com.taha.data.mock
+package com.taha.domain.mock
 
 import com.taha.domain.entities.ToiletEntity
 
 
-internal val DefaultToiletEntityMock = ToiletEntity(
+val DefaultToiletEntityMock = ToiletEntity(
   id = "1",
   latitude = 1.0,
   longitude = 2.0,
@@ -15,7 +15,7 @@ internal val DefaultToiletEntityMock = ToiletEntity(
   babyArea = "yes"
 )
 
-internal val NonAccessibleToiletEntityMock = ToiletEntity(
+val NonAccessibleToiletEntityMock = ToiletEntity(
   id = "2",
   latitude = 3.0,
   longitude = 4.0,
@@ -27,7 +27,10 @@ internal val NonAccessibleToiletEntityMock = ToiletEntity(
   babyArea = "no"
 )
 
-internal val ToiletEntitiesMock = listOf(
+val ToiletEntitiesMock = listOf(
   DefaultToiletEntityMock,
   NonAccessibleToiletEntityMock
 )
+
+val ToiletDetailsEntitiesMock = listOf(DefaultToiletEntityMock)
+val EmptyToiletDetailsEntitiesMock = emptyList<ToiletEntity>()

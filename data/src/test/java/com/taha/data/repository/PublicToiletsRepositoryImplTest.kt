@@ -40,7 +40,7 @@ class PublicToiletsRepositoryImplTest {
     coEvery { apiService.getToilets(start = start, rows = rows) } returns ToiletResponseDtoMock
 
 
-    val result = repository.getPublicToilets(start, rows)
+    val result = repository.getToilets(start, rows)
 
     assertTrue(result.isSuccess)
     assertEquals(expectedEntities, result.getOrNull())
@@ -54,7 +54,7 @@ class PublicToiletsRepositoryImplTest {
     coEvery { apiService.getToilets(start = start, rows = rows) } throws exception
 
 
-    val result = repository.getPublicToilets(start, rows)
+    val result = repository.getToilets(start, rows)
 
 
     assertTrue(result.isFailure)

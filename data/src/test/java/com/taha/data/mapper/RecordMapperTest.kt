@@ -4,8 +4,8 @@ package com.taha.data.mapper
 import com.taha.data.mock.DefaultRecordDtoMock
 import com.taha.data.mock.DefaultToiletEntityMock
 import com.taha.data.mock.EmptyToiletResponseDtoMock
-import com.taha.data.mock.ToiletDetailsEntitiesMock
 import com.taha.data.mock.ToiletDetailsResponseDtoMock
+import com.taha.data.mock.ToiletEntitiesMock
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -20,7 +20,7 @@ class RecordMapperTest {
   @Test
   fun `toEntities maps List of RecordDto to List of ToiletEntity correctly`() {
     val toiletEntities = ToiletDetailsResponseDtoMock.records.toEntities()
-    assertEquals(ToiletDetailsEntitiesMock, toiletEntities)
+    assertEquals(ToiletEntitiesMock, toiletEntities)
   }
 
   @Test(expected = NoSuchElementException::class)

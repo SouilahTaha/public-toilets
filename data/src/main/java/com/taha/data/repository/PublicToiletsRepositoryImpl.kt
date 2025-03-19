@@ -11,7 +11,7 @@ class PublicToiletsRepositoryImpl @Inject constructor(
   private val api: ApiService,
 ) : PublicToiletsRepository {
 
-  override suspend fun getPublicToilets(start: Int, rows: Int): Result<List<ToiletEntity>> = runCatching {
+  override suspend fun getToilets(start: Int, rows: Int): Result<List<ToiletEntity>> = runCatching {
     val response = api.getToilets(start = start, rows = rows)
     response.records.toEntities()
   }.onFailure {
