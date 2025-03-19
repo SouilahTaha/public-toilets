@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,10 +24,12 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -47,7 +50,9 @@ import com.taha.publictoilets.ui.publictoilets.component.PublicToiletUiModelItem
 import com.taha.publictoilets.ui.publictoilets.component.PublicToiletsMap
 import com.taha.publictoilets.ui.publictoilets.component.PublicToiletsTabs
 import com.taha.publictoilets.uimodel.PublicToiletUiModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 
+private const val LOAD_MORE_THRESHOLD = 2
 
 @Composable
 internal fun PublicToiletsScreen(
@@ -106,7 +111,7 @@ internal fun PublicToiletsScreen(
     content = { innerPadding ->
       when (val currentState = publicToiletUiState) {
         is PublicToiletsUiState.Loading -> Loader()
-        is PublicToiletsUiState.Error -> Error(onRetry = { viewModel.getToilets() })
+        is PublicToiletsUiState.Error -> Error(onRetry = viewModel::getToilets)
         is PublicToiletsUiState.Success -> PublicToiletsSuccessContent(
           isFilterSheetOpen = isFilterSheetOpen,
           isPrmFilterEnabled = isPrmFilterEnabled,
@@ -119,7 +124,8 @@ internal fun PublicToiletsScreen(
             viewModel.filterPublicToilets(isPrmFilterEnabled)
           },
           onDismiss = { isFilterSheetOpen = false },
-          onModeSelected = { viewModel.changeView(it) }
+          onModeSelected = viewModel::changeView,
+          onLoadMore = viewModel::loadMore
         )
       }
     }
@@ -135,8 +141,9 @@ private fun PublicToiletsSuccessContent(
   publicToilets: List<PublicToiletUiModel>,
   userLocation: LatLng?,
   modifier: Modifier = Modifier,
-  onFilterClick: () -> Unit,
   onDismiss: () -> Unit,
+  onFilterClick: () -> Unit,
+  onLoadMore: () -> Unit,
   onModeSelected: (ViewType) -> Unit,
 ) {
   val sheetState = rememberModalBottomSheetState()
@@ -148,7 +155,8 @@ private fun PublicToiletsSuccessContent(
       isDefaultModeSelected = isDefaultModeSelected,
       onModeSelected = onModeSelected,
       publicToilets = publicToilets,
-      userLocation = userLocation
+      userLocation = userLocation,
+      onLoadMore = onLoadMore
     )
   }
   if (isFilterSheetOpen) {
@@ -166,9 +174,10 @@ private fun PublicToiletsSuccessContent(
 private fun PublicToilets(
   modifier: Modifier,
   isDefaultModeSelected: Boolean,
-  onModeSelected: (ViewType) -> Unit,
   publicToilets: List<PublicToiletUiModel>,
-  userLocation: LatLng?
+  userLocation: LatLng?,
+  onLoadMore: () -> Unit,
+  onModeSelected: (ViewType) -> Unit
 ) {
   Column(modifier = modifier) {
     PublicToiletsTabs(
@@ -178,7 +187,7 @@ private fun PublicToilets(
     )
     Spacer(modifier = Modifier.height(NormalPadding))
     if (isDefaultModeSelected) {
-      PublicToiletListMode(toilets = publicToilets)
+      PublicToiletListMode(toilets = publicToilets, onLoadMore = onLoadMore)
     } else {
       PublicToiletsMap(
         userLocation = userLocation,
@@ -189,12 +198,38 @@ private fun PublicToilets(
 }
 
 @Composable
-private fun PublicToiletListMode(toilets: List<PublicToiletUiModel>) =
-  LazyColumn(contentPadding = PaddingValues(LargePadding)) {
+private fun PublicToiletListMode(
+  toilets: List<PublicToiletUiModel>,
+  onLoadMore: () -> Unit
+) {
+  val listState = rememberLazyListState()
+  val loadMore = remember {
+    derivedStateOf {
+      val layoutInfo = listState.layoutInfo
+      val totalItemsNumber = layoutInfo.totalItemsCount
+      val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+
+      lastVisibleItemIndex > (totalItemsNumber - LOAD_MORE_THRESHOLD)
+    }
+  }
+  LazyColumn(
+    contentPadding = PaddingValues(LargePadding),
+    state = listState
+  ) {
     items(toilets) { toilet ->
       PublicToiletUiModelItem(toilet = toilet)
     }
   }
+
+  LaunchedEffect(loadMore) {
+    snapshotFlow { loadMore.value }
+      .distinctUntilChanged()
+      .collect {
+        onLoadMore()
+      }
+  }
+
+}
 
 @Preview(showBackground = true)
 @Composable

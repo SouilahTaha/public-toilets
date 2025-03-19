@@ -7,11 +7,11 @@ import java.text.DecimalFormat
 
 internal fun List<ToiletEntity>.toPublicToiletsUiModel() = this.map { it.toPublicToiletUiModel() }
 
-private fun ToiletEntity.toPublicToiletUiModel(): PublicToiletUiModel {
+internal fun ToiletEntity.toPublicToiletUiModel(): PublicToiletUiModel {
   return PublicToiletUiModel(
     address = this.address,
     openingHours = this.schedule,
-    isPrmAccessible = this.isAccessible.lowercase() == "yes",
+    isPrmAccessible = this.isAccessible.lowercase() == "oui",
     location = LatLng(this.latitude, this.longitude)
   )
 }

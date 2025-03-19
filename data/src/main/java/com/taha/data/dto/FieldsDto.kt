@@ -2,22 +2,9 @@ package com.taha.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-
-data class ToiletResponse(
-    val records: List<Record>
-)
-
-data class Record(
-    @SerializedName("datasetid") val datasetId: String,
-    @SerializedName("recordid") val recordId: String,
-    val fields: Fields,
-    val geometry: Geometry,
-    @SerializedName("record_timestamp") val recordTimestamp: String
-)
-
-data class Fields(
+data class FieldsDto(
     @SerializedName("complement_adresse") val complementAddress: String?,
-    @SerializedName("geo_shape") val geoShape: GeoShape,
+    @SerializedName("geo_shape") val geoShape: GeoShapeDto,
     val horaire: String,
     @SerializedName("acces_pmr") val accesPmr: String,
     val arrondissement: Int,
@@ -28,14 +15,4 @@ data class Fields(
     val type: String,
     @SerializedName("url_fiche_equipement") val urlFicheEquipement: String? = null,
     @SerializedName("relais_bebe") val relaisBebe: String? = null
-)
-
-data class GeoShape(
-    val coordinates: List<List<Double>>,
-    val type: String
-)
-
-data class Geometry(
-    val type: String,
-    val coordinates: List<Double>
 )

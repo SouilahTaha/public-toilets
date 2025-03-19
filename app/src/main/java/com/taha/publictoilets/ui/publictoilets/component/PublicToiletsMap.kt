@@ -25,6 +25,8 @@ import com.taha.publictoilets.R
 import com.taha.publictoilets.uimodel.PublicToiletUiModel
 
 private val DEFAULT_PARIS_LOCATION = LatLng(48.8584, 2.2945)
+private const val CAMERA_ZOOM_DURATION_IN_MS = 1000
+private const val CAMERA_DEFAULT_ZOOM = 15f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,8 +46,8 @@ internal fun PublicToiletsMap(
   LaunchedEffect(userLocation) {
     if (userLocation != null) {
       cameraPositionState.animate(
-        CameraUpdateFactory.newLatLngZoom(userLocation, 15f),
-        1000
+        update = CameraUpdateFactory.newLatLngZoom(userLocation, CAMERA_DEFAULT_ZOOM),
+        durationMs = CAMERA_ZOOM_DURATION_IN_MS
       )
     }
   }

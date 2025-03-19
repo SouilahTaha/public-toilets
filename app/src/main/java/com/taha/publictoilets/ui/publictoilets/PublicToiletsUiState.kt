@@ -8,6 +8,8 @@ sealed class PublicToiletsUiState {
   data object Loading : PublicToiletsUiState()
   data class Success(
     val toilets: List<PublicToiletUiModel>,
+    val page: Int = 0,
+    val canPaginate: Boolean = true,
     val userLocation: LatLng? = null,
     val viewType: ViewType = ViewType.LIST
   ) : PublicToiletsUiState()

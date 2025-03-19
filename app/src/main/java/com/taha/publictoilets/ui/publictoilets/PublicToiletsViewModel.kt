@@ -40,21 +40,31 @@ class PublicToiletsViewModel @Inject constructor(
   internal fun getToilets() {
     viewModelScope.launch {
       val result: Result<List<ToiletEntity>> = getToiletsUseCase()
-      when (result.isSuccess) {
-        true -> {
-          originalToiletsList = result.getOrNull()?.toPublicToiletsUiModel() ?: emptyList()
-          publicToiletsUiState.value = PublicToiletsUiState.Success(toilets = originalToiletsList)
-        }
+      if (result.isSuccess) {
+        originalToiletsList = result.getOrNull()?.toPublicToiletsUiModel() ?: emptyList()
+        publicToiletsUiState.value = PublicToiletsUiState.Success(toilets = originalToiletsList, page = 1)
+      } else {
+        publicToiletsUiState.value = PublicToiletsUiState.Error
+      }
+    }
+  }
 
-        false -> {
-          publicToiletsUiState.value = PublicToiletsUiState.Error
-        }
+  internal fun loadMore() {
+    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("state should be success")
+    if (!currentState.canPaginate) return
+    viewModelScope.launch {
+      val result: Result<List<ToiletEntity>> = getToiletsUseCase(page = currentState.page)
+      if (result.isSuccess) {
+        originalToiletsList += result.getOrNull()?.toPublicToiletsUiModel() ?: emptyList()
+        publicToiletsUiState.value = PublicToiletsUiState.Success(toilets = originalToiletsList, page = currentState.page + 1)
+      } else {
+        publicToiletsUiState.update { currentState.copy(canPaginate = false) }
       }
     }
   }
 
   internal fun filterPublicToilets(isPublicFilterEnabled: Boolean) {
-    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("")
+    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("state should be success")
     val filteredList = if (isPublicFilterEnabled) {
       originalToiletsList.filter { it.isPrmAccessible }
     } else {
@@ -71,7 +81,7 @@ class PublicToiletsViewModel @Inject constructor(
   }
 
   internal fun changeView(viewType: ViewType) {
-    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("")
+    val currentState = publicToiletsUiState.value as? PublicToiletsUiState.Success ?: throw Exception("state should be success")
     publicToiletsUiState.update {
       currentState.copy(viewType = viewType)
     }
