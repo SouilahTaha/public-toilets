@@ -7,20 +7,27 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.android.gms.maps.model.LatLng
 import com.taha.design_system.theme.LargePadding
-import com.taha.publictoilets.uimodel.PublicToiletUiModel
+import com.taha.publictoilets.uimodel.ToiletUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DetailsBottomSheet(
   sheetState: SheetState,
-  toilet: PublicToiletUiModel,
-  onDismiss: () -> Unit
+  toilet: ToiletUiModel,
+  userLocation: LatLng?,
+  onDismiss: () -> Unit,
+  onToiletClick: (String) -> Unit,
 ) = ModalBottomSheet(
   sheetState = sheetState,
   onDismissRequest = onDismiss,
 ) {
   Column(modifier = Modifier.padding(LargePadding)) {
-    PublicToiletUiModelItem(toilet)
+    ToiletUiModelItem(
+      userLocation = userLocation,
+      toilet = toilet,
+      onToiletClick = onToiletClick
+    )
   }
 }

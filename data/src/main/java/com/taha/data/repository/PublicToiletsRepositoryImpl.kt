@@ -1,7 +1,6 @@
 package com.taha.data.repository
 
 import com.taha.data.api.ApiService
-import com.taha.data.dto.ToiletDetailsResponseDto
 import com.taha.data.mapper.toEntities
 import com.taha.data.mapper.toEntity
 import com.taha.domain.entities.ToiletEntity
@@ -19,11 +18,12 @@ class PublicToiletsRepositoryImpl @Inject constructor(
     Result.failure<List<ToiletEntity>>(it)
   }
 
-  override suspend fun getPublicToiletDetails(toiletId: String): Result<ToiletEntity> =
+  override suspend fun getToiletDetails(toiletId: String): Result<ToiletEntity> =
     runCatching {
-      val response: ToiletDetailsResponseDto = api.getToiletDetails(toiletId = toiletId)
-      response.record.toEntity()
+      val response = api.getToiletDetails(toiletId = toiletId)
+      val toiletRecord = response.records.firstOrNull()
+      toiletRecord?.toEntity() ?: throw NoSuchElementException("No toilet record found for ID: $toiletId")
     }.onFailure {
-      return Result.failure<ToiletEntity>(it)
+      return Result.failure(it)
     }
 }

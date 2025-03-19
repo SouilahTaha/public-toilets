@@ -7,7 +7,7 @@ data class ToiletEntity(
     val address: String,
     val name: String,
     val schedule: String,
-    val isAccessible: String,//todo change to boolean
-    val arrondissement: Int,
+    val isAccessible: String,
+    val district: Int,
     val babyArea: String? = null
 )

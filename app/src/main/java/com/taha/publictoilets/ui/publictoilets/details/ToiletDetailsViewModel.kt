@@ -1,11 +1,12 @@
 package com.taha.publictoilets.ui.publictoilets.details
 
-import PublicToiletDetailsUiState
+import ToiletDetailsUiState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.taha.domain.entities.ToiletEntity
-import com.taha.domain.usecase.GetPublicToiletDetailsUseCase
+import com.taha.domain.usecase.GetToiletDetailsUseCase
+import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_ID_KEY
 import com.taha.publictoilets.uimodel.mapper.toPublicToiletUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,33 +16,33 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PublicToiletDetailsViewModel @Inject constructor(
-  private val getPublicToiletDetailsUseCase: GetPublicToiletDetailsUseCase,
+class ToiletDetailsViewModel @Inject constructor(
+  private val getToiletDetailsUseCase: GetToiletDetailsUseCase,
   savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-  private val publicToiletDetailsUiState = MutableStateFlow<PublicToiletDetailsUiState>(PublicToiletDetailsUiState.Loading)
-  internal fun getPublicToiletDetailsUiState(): StateFlow<PublicToiletDetailsUiState> = publicToiletDetailsUiState.asStateFlow()
+  private val publicToiletDetailsUiState = MutableStateFlow<ToiletDetailsUiState>(ToiletDetailsUiState.Loading)
+  internal fun getToiletDetailsUiState(): StateFlow<ToiletDetailsUiState> = publicToiletDetailsUiState.asStateFlow()
 
   init {
-    savedStateHandle.getStateFlow("", "").value.run {
+    savedStateHandle.getStateFlow(TOILET_ID_KEY, "").value.run {
       getToilets(this)
     }
   }
 
   private fun getToilets(toiletID: String) {
     viewModelScope.launch {
-      val result: Result<ToiletEntity> = getPublicToiletDetailsUseCase(toiletID)
+      val result: Result<ToiletEntity> = getToiletDetailsUseCase(toiletID)
       if (result.isSuccess) {
         val toiletDetails = result.map { entity ->
           entity.toPublicToiletUiModel()
         }.getOrElse {
-          publicToiletDetailsUiState.value = PublicToiletDetailsUiState.Error
+          publicToiletDetailsUiState.value = ToiletDetailsUiState.Error
           return@launch
         }
-        publicToiletDetailsUiState.value = PublicToiletDetailsUiState.Success(toilet = toiletDetails)
+        publicToiletDetailsUiState.value = ToiletDetailsUiState.Success(toilet = toiletDetails)
       } else {
-        publicToiletDetailsUiState.value = PublicToiletDetailsUiState.Error
+        publicToiletDetailsUiState.value = ToiletDetailsUiState.Error
       }
     }
   }
