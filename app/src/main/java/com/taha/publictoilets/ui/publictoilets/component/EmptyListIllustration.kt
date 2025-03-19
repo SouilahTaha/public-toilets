@@ -33,11 +33,11 @@ fun EmptyListIllustration(
   ) {
     Icon(
       imageVector = Icons.AutoMirrored.Filled.List,
-      contentDescription = stringResource(com.taha.publictoilets.R.string.public_toilets_empty_list_illustration)
+      contentDescription = stringResource(com.taha.publictoilets.R.string.toilets_empty_list_illustration)
     )
     Spacer(modifier = Modifier.height(NormalPadding))
     Text(
-      text = stringResource(com.taha.publictoilets.R.string.public_toilets_empty_list_message),
+      text = stringResource(com.taha.publictoilets.R.string.toilets_empty_list_message),
       style = MaterialTheme.typography.bodyMedium,
       textAlign = TextAlign.Center,
       color = MaterialTheme.colorScheme.outline

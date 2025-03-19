@@ -1,18 +1,14 @@
 package com.taha.publictoilets.ui.publictoilets.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Accessible
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Directions
 import androidx.compose.material.icons.filled.NotAccessible
 import androidx.compose.material3.Card
@@ -22,21 +18,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.android.gms.maps.model.LatLng
 import com.taha.design_system.theme.LargePadding
 import com.taha.design_system.theme.SmallPadding
 import com.taha.design_system.theme.VerySmallPadding
 import com.taha.publictoilets.R
+import com.taha.publictoilets.extenstions.calculateDistance
 import com.taha.publictoilets.extenstions.openMap
-import com.taha.publictoilets.uimodel.PublicToiletUiModel
-import com.taha.publictoilets.uimodel.publicToiletsUiModelMock
+import com.taha.publictoilets.ui.component.ActionButton
+import com.taha.publictoilets.uimodel.ToiletUiModel
+import com.taha.publictoilets.uimodel.defaultToiletMock
 
 
 @Composable
-internal fun PublicToiletUiModelItem(toilet: PublicToiletUiModel) {
+internal fun ToiletUiModelItem(
+  userLocation: LatLng?,
+  toilet: ToiletUiModel,
+  onToiletClick: (String) -> Unit
+) {
   val context = LocalContext.current
   Card(
     modifier = Modifier
@@ -49,17 +51,21 @@ internal fun PublicToiletUiModelItem(toilet: PublicToiletUiModel) {
       OpeningHour(toilet.openingHours)
       Spacer(modifier = Modifier.size(VerySmallPadding))
       AccessibilityRow(toilet.isPrmAccessible)
-      if (toilet.distance != null) {
+      if (userLocation != null) {
         Spacer(modifier = Modifier.size(VerySmallPadding))
-        Distance(toilet.distance)
+        Distance(userLocation, toilet.location)
       }
       Spacer(modifier = Modifier.size(VerySmallPadding))
-      ItineraryButton(onClick = {
-        context.openMap(
-          latitude = toilet.location.latitude,
-          longitude = toilet.location.longitude
-        )
-      })
+      Row {
+        ItineraryButton(onClick = {
+          context.openMap(
+            latitude = toilet.location.latitude,
+            longitude = toilet.location.longitude
+          )
+        })
+        Spacer(modifier = Modifier.size(SmallPadding))
+        DetailsButton(onClick = { onToiletClick(toilet.toiletId) })
+      }
     }
   }
 }
@@ -75,7 +81,7 @@ private fun Address(address: String) {
 @Composable
 private fun OpeningHour(openingHours: String) {
   Text(
-    text = stringResource(R.string.public_toilet_item_opening_hours_prefix_text, openingHours),
+    text = stringResource(R.string.toilet_item_opening_hours_prefix_text, openingHours),
     style = MaterialTheme.typography.bodyMedium
   )
 }
@@ -92,7 +98,7 @@ private fun AccessibilityRow(isPrmAccessible: Boolean) {
       )
       Spacer(modifier = Modifier.size(VerySmallPadding))
       Text(
-        text = stringResource(R.string.public_toilet_item_accessible_text),
+        text = stringResource(R.string.toilet_item_accessible_text),
         color = MaterialTheme.colorScheme.tertiary
       )
     } else {
@@ -103,7 +109,7 @@ private fun AccessibilityRow(isPrmAccessible: Boolean) {
         modifier = Modifier.size(LargePadding)
       )
       Text(
-        text = stringResource(R.string.public_toilet_item_not_accessible_text),
+        text = stringResource(R.string.toilet_item_not_accessible_text),
         color = MaterialTheme.colorScheme.error
       )
     }
@@ -111,38 +117,37 @@ private fun AccessibilityRow(isPrmAccessible: Boolean) {
 }
 
 @Composable
-private fun Distance(distance: String) {
-  Text(text = stringResource(R.string.public_toilets_item_distance_prefix_text, distance))
+private fun Distance(userLocation: LatLng, toiletLocation: LatLng) {
+  val distance = userLocation.calculateDistance(toiletLocation)
+  Text(text = stringResource(R.string.toilets_item_distance_prefix_text, distance))
 }
 
 @Composable
-internal fun ItineraryButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
-  Row(
-    modifier = modifier
-      .wrapContentSize()
-      .clip(RoundedCornerShape(50))
-      .background(MaterialTheme.colorScheme.primaryContainer)
-      .clickable { onClick() }
-      .padding(SmallPadding),
-    horizontalArrangement = Arrangement.Center,
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    Icon(
-      imageVector = Icons.Filled.Directions,
-      contentDescription = stringResource(R.string.public_toilet_item_itinerary_description),
-      tint = MaterialTheme.colorScheme.primary,
-    )
-    Spacer(modifier = Modifier.size(VerySmallPadding))
-    Text(
-      text = stringResource(R.string.public_toilet_item_itinerary_text),
-      color = MaterialTheme.colorScheme.primary,
-      style = MaterialTheme.typography.bodyMedium,
-    )
-  }
-}
+internal fun ItineraryButton(onClick: () -> Unit, modifier: Modifier = Modifier) =
+  ActionButton(
+    icon = Icons.Filled.Directions,
+    textResId = R.string.toilet_item_itinerary_text,
+    contentDescriptionResId = R.string.toilet_item_itinerary_description,
+    modifier = modifier,
+    onClick = onClick
+  )
+
+@Composable
+internal fun DetailsButton(onClick: () -> Unit, modifier: Modifier = Modifier) =
+  ActionButton(
+    icon = Icons.Filled.Details,
+    textResId = R.string.toilet_item_details_text,
+    contentDescriptionResId = R.string.toilet_item_details_description,
+    modifier = modifier,
+    onClick = onClick
+  )
 
 @Preview(showBackground = true)
 @Composable
 private fun PublicToiletUiModelItemPreview() {
-  PublicToiletUiModelItem(publicToiletsUiModelMock.first())
+  ToiletUiModelItem(
+    userLocation = LatLng(48.864716, 2.349014),
+    toilet = defaultToiletMock,
+    onToiletClick = {}
+  )
 }

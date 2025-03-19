@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.taha.design_system.theme.SmallPadding
 
 @Composable
-internal fun PublicToiletsTabs(
+internal fun ToiletsTabs(
   isDefaultModeSelected: Boolean,
   modifier: Modifier = Modifier,
   onModeSelected: (ViewType) -> Unit
@@ -45,7 +45,7 @@ internal fun PublicToiletsTabs(
 fun PublicToiletsTabsPreviewDefault() {
   MaterialTheme {
     Surface {
-      PublicToiletsTabs(
+      ToiletsTabs(
         isDefaultModeSelected = true,
         onModeSelected = {}
       )
@@ -58,7 +58,7 @@ fun PublicToiletsTabsPreviewDefault() {
 fun PublicToiletsTabsPreviewMap() {
   MaterialTheme {
     Surface {
-      PublicToiletsTabs(
+      ToiletsTabs(
         isDefaultModeSelected = false,
         onModeSelected = {}
       )

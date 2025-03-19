@@ -5,25 +5,40 @@
   <string name="retry_icon_description">@string/error_retry</string>
 
   <!--Public Toilets Screen Section-->
-  <string name="public_toilets_title">Public toilets in Paris</string>
-  <string name="public_toilets_list_tab_label">List</string>
-  <string name="public_toilets_map_tab_label">Map</string>
-  <string name="public_toilets_location_permission_denied_error_text">Location permission denied</string>
-  <string name="public_toilets_your_position_title">Your position</string>
-  <string name="public_toilets_your_position_description">You are here</string>
-  <string name="public_toilets_empty_list_illustration">empty list illustration</string>
-  <string name="public_toilets_empty_list_message">No data found</string>
+  <string name="toilets_title">Public toilets in Paris</string>
+  <string name="toilets_list_tab_label">List</string>
+  <string name="toilets_map_tab_label">Map</string>
+  <string name="toilets_location_permission_denied_error_text">Location permission denied</string>
+  <string name="toilets_your_position_title">Your position</string>
+  <string name="toilets_your_position_description">You are here</string>
+  <string name="toilets_empty_list_illustration">empty list illustration</string>
+  <string name="toilets_empty_list_message">No data found</string>
 
   <!--Public Toilet item Section-->
-  <string name="public_toilet_item_accessible_text">PRM Accessible</string>
-  <string name="public_toilet_item_not_accessible_text">Not PRM Accessible</string>
-  <string name="public_toilet_item_opening_hours_prefix_text">Opening Hours: %1$s</string>
-  <string name="public_toilets_item_distance_prefix_text">Distance: %1$s</string>
-  <string name="public_toilet_item_itinerary_text">Itinerary</string>
-  <string name="public_toilet_item_itinerary_description">Itinerary</string>
+  <string name="toilet_item_accessible_text">PRM Accessible</string>
+  <string name="toilet_item_not_accessible_text">Not PRM Accessible</string>
+  <string name="toilet_item_opening_hours_prefix_text">Opening Hours: %1$s</string>
+  <string name="toilets_item_distance_prefix_text">Distance: %1$s Km</string>
+  <string name="toilet_item_itinerary_text">Itinerary</string>
+  <string name="toilet_item_itinerary_description">Itinerary</string>
+  <string name="toilet_item_details_text">More details</string>
+  <string name="toilet_item_details_description">details</string>
+  <string name="toilets_your_position_marker_content_description">Your position\'s marker</string>
 
   <!--Configuration Section-->
   <string name="configuration_bottom_sheet_accessible_filter_default_label">PRM Accessible</string>
   <string name="configuration_bottom_sheet_accessible_filter_selected_label">PRM Accessible selected</string>
-  <string name="public_toilets_your_position_marker_content_description">Your position\'s marker</string>
+
+  <!--Public Toilet details Section-->
+  <string name="toilet_details_address_label">Address</string>
+  <string name="toilet_details_accessible_label">Accessibility</string>
+  <string name="toilet_details_accessible_text">PRM Accessible</string>
+  <string name="toilet_details_not_accessible_text">Not PRM Accessible</string>
+  <string name="toilet_details_opening_hours_text">Opening Hours</string>
+  <string name="toilet_details_distance_text">Distance</string>
+  <string name="details_screen_title">Toilet Details</string>
+  <string name="toilet_details_district_label">District</string>
+  <string name="toilet_details_baby_area_label">Baby area</string>
+  <string name="toilet_details_baby_area_text">Available</string>
+  <string name="details_screen_back_buton_description">Go Back</string>
 </resources>

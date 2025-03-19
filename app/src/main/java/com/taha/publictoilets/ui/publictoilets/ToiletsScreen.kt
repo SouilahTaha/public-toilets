@@ -1,6 +1,7 @@
 package com.taha.publictoilets.ui.publictoilets
 
-import PublicToiletsUiState
+import ToiletsUiEvent
+import ToiletsUiState
 import ViewType
 import android.Manifest
 import android.widget.Toast
@@ -46,22 +47,32 @@ import com.taha.publictoilets.ui.component.Loader
 import com.taha.publictoilets.ui.component.ToolbarWithTitle
 import com.taha.publictoilets.ui.publictoilets.component.ConfigurationBottomSheet
 import com.taha.publictoilets.ui.publictoilets.component.EmptyListIllustration
-import com.taha.publictoilets.ui.publictoilets.component.PublicToiletUiModelItem
-import com.taha.publictoilets.ui.publictoilets.component.PublicToiletsMap
-import com.taha.publictoilets.ui.publictoilets.component.PublicToiletsTabs
-import com.taha.publictoilets.uimodel.PublicToiletUiModel
+import com.taha.publictoilets.ui.publictoilets.component.ToiletUiModelItem
+import com.taha.publictoilets.ui.publictoilets.component.ToiletsMap
+import com.taha.publictoilets.ui.publictoilets.component.ToiletsTabs
+import com.taha.publictoilets.uimodel.ToiletUiModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 private const val LOAD_MORE_THRESHOLD = 2
 
 @Composable
-internal fun PublicToiletsScreen(
-  viewModel: PublicToiletsViewModel = hiltViewModel<PublicToiletsViewModel>(),
+internal fun ToiletsScreen(
+  viewModel: ToiletsViewModel = hiltViewModel<ToiletsViewModel>(),
+  onToiletClick: (String) -> Unit,
 ) {
   val context = LocalContext.current
-  val publicToiletUiState by viewModel.getPublicToiletsUiState().collectAsState()
+  val toiletsUiState by viewModel.getToiletsUiState().collectAsState()
   var isFilterSheetOpen by remember { mutableStateOf(false) }
   var isPrmFilterEnabled by remember { mutableStateOf(false) }
+
+  //handle events
+  LaunchedEffect(key1 = Unit) {
+    viewModel.getToiletsUiEvent().collectLatest { uiEvent ->
+      handleToiletsUiEvent(uiEvent, onToiletClick)
+    }
+  }
+  //end handle events
 
   //handle location permission and map
   var hasPermission by remember { mutableStateOf(context.checkLocationPermission()) }
@@ -76,14 +87,14 @@ internal fun PublicToiletsScreen(
       } else {
         Toast.makeText(
           /* context = */context,
-          /* text = */context.getString(R.string.public_toilets_location_permission_denied_error_text),
+          /* text = */context.getString(R.string.toilets_location_permission_denied_error_text),
           /* duration = */Toast.LENGTH_SHORT
         ).show()
       }
     }
   )
 
-  LaunchedEffect(publicToiletUiState) {
+  LaunchedEffect(toiletsUiState) {
     if (!hasPermission) {
       requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     } else {
@@ -98,7 +109,7 @@ internal fun PublicToiletsScreen(
     modifier = Modifier.statusBarsPadding(),
     topBar = {
       ToolbarWithTitle(
-        title = stringResource(R.string.public_toilets_title),
+        title = stringResource(R.string.toilets_title),
         actions = { isFilterSheetOpen = true },
         actionIcon = {
           Icon(
@@ -109,54 +120,70 @@ internal fun PublicToiletsScreen(
       )
     },
     content = { innerPadding ->
-      when (val currentState = publicToiletUiState) {
-        is PublicToiletsUiState.Loading -> Loader()
-        is PublicToiletsUiState.Error -> Error(onRetry = viewModel::getToilets)
-        is PublicToiletsUiState.Success -> PublicToiletsSuccessContent(
+      when (val currentState = toiletsUiState) {
+        is ToiletsUiState.Loading -> Loader()
+        is ToiletsUiState.Error -> Error(onRetry = viewModel::getToilets)
+        is ToiletsUiState.Success -> ToiletsSuccessContent(
           isFilterSheetOpen = isFilterSheetOpen,
           isPrmFilterEnabled = isPrmFilterEnabled,
           isDefaultModeSelected = currentState.viewType == ViewType.LIST,
-          publicToilets = currentState.toilets,
+          toilets = currentState.toilets,
           userLocation = currentState.userLocation,
           modifier = Modifier.padding(innerPadding),
           onFilterClick = {
             isPrmFilterEnabled = !isPrmFilterEnabled
-            viewModel.filterPublicToilets(isPrmFilterEnabled)
+            viewModel.filterToilets(isPrmFilterEnabled)
           },
           onDismiss = { isFilterSheetOpen = false },
           onModeSelected = viewModel::changeView,
-          onLoadMore = viewModel::loadMore
+          onLoadMore = viewModel::loadMore,
+          onToiletClick = viewModel::onToiletClick
         )
       }
     }
   )
 }
 
+private fun handleToiletsUiEvent(
+  toiletsUiEvent: ToiletsUiEvent,
+  onToiletClick: (String) -> Unit
+) {
+  when (toiletsUiEvent) {
+    is ToiletsUiEvent.NavigateToToiletDetails -> {
+      onToiletClick(toiletsUiEvent.toiletId)
+    }
+
+    else -> {}
+  }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PublicToiletsSuccessContent(
+private fun ToiletsSuccessContent(
   isFilterSheetOpen: Boolean,
   isDefaultModeSelected: Boolean,
   isPrmFilterEnabled: Boolean,
-  publicToilets: List<PublicToiletUiModel>,
+  toilets: List<ToiletUiModel>,
   userLocation: LatLng?,
   modifier: Modifier = Modifier,
   onDismiss: () -> Unit,
   onFilterClick: () -> Unit,
+  onToiletClick: (String) -> Unit,
   onLoadMore: () -> Unit,
   onModeSelected: (ViewType) -> Unit,
 ) {
   val sheetState = rememberModalBottomSheetState()
-  if (publicToilets.isEmpty()) {
+  if (toilets.isEmpty()) {
     EmptyListIllustration()
   } else {
-    PublicToilets(
+    Toilets(
       modifier = modifier,
       isDefaultModeSelected = isDefaultModeSelected,
       onModeSelected = onModeSelected,
-      publicToilets = publicToilets,
+      toilets = toilets,
       userLocation = userLocation,
-      onLoadMore = onLoadMore
+      onLoadMore = onLoadMore,
+      onToiletClick = onToiletClick
     )
   }
   if (isFilterSheetOpen) {
@@ -171,36 +198,45 @@ private fun PublicToiletsSuccessContent(
 
 @ExperimentalMaterial3Api
 @Composable
-private fun PublicToilets(
+private fun Toilets(
   modifier: Modifier,
   isDefaultModeSelected: Boolean,
-  publicToilets: List<PublicToiletUiModel>,
+  toilets: List<ToiletUiModel>,
   userLocation: LatLng?,
+  onToiletClick: (String) -> Unit,
   onLoadMore: () -> Unit,
   onModeSelected: (ViewType) -> Unit
 ) {
   Column(modifier = modifier) {
-    PublicToiletsTabs(
+    ToiletsTabs(
       isDefaultModeSelected = isDefaultModeSelected,
       onModeSelected = onModeSelected,
       modifier = Modifier.padding(start = LargePadding)
     )
     Spacer(modifier = Modifier.height(NormalPadding))
     if (isDefaultModeSelected) {
-      PublicToiletListMode(toilets = publicToilets, onLoadMore = onLoadMore)
-    } else {
-      PublicToiletsMap(
+      ToiletListMode(
+        toilets = toilets,
         userLocation = userLocation,
-        publicToilets = publicToilets
+        onLoadMore = onLoadMore,
+        onToiletClick = onToiletClick
+      )
+    } else {
+      ToiletsMap(
+        userLocation = userLocation,
+        publicToilets = toilets,
+        onToiletClick = onToiletClick
       )
     }
   }
 }
 
 @Composable
-private fun PublicToiletListMode(
-  toilets: List<PublicToiletUiModel>,
-  onLoadMore: () -> Unit
+private fun ToiletListMode(
+  toilets: List<ToiletUiModel>,
+  userLocation: LatLng?,
+  onLoadMore: () -> Unit,
+  onToiletClick: (String) -> Unit
 ) {
   val listState = rememberLazyListState()
   val loadMore = remember {
@@ -217,7 +253,11 @@ private fun PublicToiletListMode(
     state = listState
   ) {
     items(toilets) { toilet ->
-      PublicToiletUiModelItem(toilet = toilet)
+      ToiletUiModelItem(
+        toilet = toilet,
+        userLocation = userLocation,
+        onToiletClick = onToiletClick
+      )
     }
   }
 
@@ -228,9 +268,8 @@ private fun PublicToiletListMode(
         onLoadMore()
       }
   }
-
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PublicToiletsSuccessScreenPreview() = PublicToiletsScreen()
+private fun ToiletsSuccessScreenPreview() = ToiletsScreen(onToiletClick = {})

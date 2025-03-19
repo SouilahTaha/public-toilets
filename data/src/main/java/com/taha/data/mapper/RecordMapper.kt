@@ -13,7 +13,7 @@ internal fun RecordDto.toEntity():ToiletEntity = ToiletEntity(
   name = fields.gestionnaire,
   schedule = fields.horaire,
   isAccessible = fields.accesPmr,
-  arrondissement = fields.arrondissement,
+  district = fields.arrondissement,
   babyArea = fields.relaisBebe
 )
 

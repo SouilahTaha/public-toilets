@@ -13,8 +13,17 @@ import androidx.compose.ui.text.style.TextAlign
 fun ToolbarWithTitle(
   title: String,
   actions: (() -> Unit)? = null,
+  navigation: (() -> Unit)? = null,
+  navigationIcon: (@Composable () -> Unit)? = null,
   actionIcon: (@Composable () -> Unit)? = null
 ) = TopAppBar(
+  navigationIcon = {
+    navigation?.let {
+      IconButton(onClick = { it.invoke() }) {
+        navigationIcon?.invoke()
+      }
+    }
+  },
   title = {
     Text(
       text = title,

@@ -22,7 +22,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.taha.publictoilets.R
-import com.taha.publictoilets.uimodel.PublicToiletUiModel
+import com.taha.publictoilets.uimodel.ToiletUiModel
 
 private val DEFAULT_PARIS_LOCATION = LatLng(48.8584, 2.2945)
 private const val CAMERA_ZOOM_DURATION_IN_MS = 1000
@@ -30,12 +30,13 @@ private const val CAMERA_DEFAULT_ZOOM = 15f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PublicToiletsMap(
+internal fun ToiletsMap(
   userLocation: LatLng?,
-  publicToilets: List<PublicToiletUiModel>
+  publicToilets: List<ToiletUiModel>,
+  onToiletClick: (String) -> Unit,
 ) {
   val sheetState = rememberModalBottomSheetState()
-  var selectedPublicToiletUiModel by remember { mutableStateOf<PublicToiletUiModel?>(null) }
+  var selectedToiletUiModel by remember { mutableStateOf<ToiletUiModel?>(null) }
 
   val cameraPositionState = rememberCameraPositionState {
     position = CameraPosition.fromLatLngZoom(
@@ -53,11 +54,13 @@ internal fun PublicToiletsMap(
   }
 
   Box(modifier = Modifier.fillMaxSize()) {
-    selectedPublicToiletUiModel?.let {
+    selectedToiletUiModel?.let {
       DetailsBottomSheet(
         sheetState = sheetState,
         toilet = it,
-        onDismiss = { selectedPublicToiletUiModel = null }
+        userLocation = userLocation,
+        onToiletClick = onToiletClick,
+        onDismiss = { selectedToiletUiModel = null }
       )
     }
     GoogleMap(
@@ -68,10 +71,10 @@ internal fun PublicToiletsMap(
     ) {
       userLocation?.let {
         Marker(
-          contentDescription = stringResource(R.string.public_toilets_your_position_marker_content_description),
+          contentDescription = stringResource(R.string.toilets_your_position_marker_content_description),
           state = MarkerState(position = it),
-          title = stringResource(R.string.public_toilets_your_position_title),
-          snippet = stringResource(R.string.public_toilets_your_position_description),
+          title = stringResource(R.string.toilets_your_position_title),
+          snippet = stringResource(R.string.toilets_your_position_description),
         )
       }
       publicToilets.forEach { toilet ->
@@ -80,7 +83,7 @@ internal fun PublicToiletsMap(
           title = toilet.address,
           snippet = toilet.openingHours,
           onClick = {
-            selectedPublicToiletUiModel = toilet
+            selectedToiletUiModel = toilet
             true
           }
         )
