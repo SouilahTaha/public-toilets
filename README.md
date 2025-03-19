@@ -13,7 +13,7 @@
 ✔ **Detail View** – Allows users to view more information about a specific toilet.  
 ✔ **Map View** – Visual representation of toilets on a map.  
 ✔ **Navigation Support** – Open a toilet’s address in a **map application** for directions.  
-✔ **Multiple View Modes** – Switch between **list and grid views**.  
+✔ **Multiple View Modes** – Switch between **list and map views**.  
 
 ---
 
@@ -49,7 +49,7 @@ The app is structured using **Clean Architecture** with three distinct layers:
 
 3. **Data Layer**  
    - **Repository** interfaces define data access contracts.  
-   - Implements **networking & caching**.  
+   - Implements **networking & caching(planed)**.  
 
 ---
 

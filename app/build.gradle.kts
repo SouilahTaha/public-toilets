@@ -11,6 +11,9 @@ android {
   namespace = "com.taha.publictoilets"
   compileSdk = 35
 
+  buildFeatures {
+    buildConfig = true
+  }
   defaultConfig {
     applicationId = "com.taha.publictoilets"
     minSdk = 24
@@ -19,7 +22,9 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    manifestPlaceholders["mapsApiKey"] = project.properties["MAPS_API_KEY"] ?: ""
+
+    val apiKey = project.findProperty("MAPS_API_KEY") as String? ?: ""
+    resValue("string", "maps_api_key", apiKey)
   }
 
   buildTypes {
