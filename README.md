@@ -55,7 +55,7 @@ The app is structured using **Clean Architecture** with three distinct layers:
 
 ## **Implemented Features**  
 
-✅ **ToiletsView** fetches toilets list. 
+✅ **ToiletsView** fetches toilets list.  
 ✅ **Toilet Detail View** – Display full details about a selected toilet.  
 ✅ **Map Integration** – Show toilets on a **Google Maps** interface.  
 ✅ **Open in Maps** – Allow users to get directions.  
@@ -64,7 +64,9 @@ The app is structured using **Clean Architecture** with three distinct layers:
 ✅ **Pagination** to load more toilets efficiently.  
 ✅ **Filtering** based on **PRM accessibility**.  
 ✅ **Location-based Sorting** (if permissions granted).  
-✅ **UI Events** allow event-driven state management.  
+✅ **UI Events** allow event-driven state management.    
+✅ **Dark/light Mode** easily switch between dark and light modes.  
+
 
 ---
 
@@ -73,8 +75,8 @@ The app is structured using **Clean Architecture** with three distinct layers:
 🔹 **Search Bar** – Find toilets by name or district.  
 🔹 **Favorite Toilets** – Let users save preferred locations.  
 🔹 **Offline Support** – Cache data for offline usage.  
-🔹 **User Reviews & Ratings** – Allow user feedback.  
-🔹 **Better UI/UX** – Implement dark mode, animations, and improved accessibility.  
+🔹 **Design System module enhancment** – Ameliorate Design system module.  
+🔹 **Better UI/UX** – Implement animations, and improved accessibility.  
 
 ---
 
