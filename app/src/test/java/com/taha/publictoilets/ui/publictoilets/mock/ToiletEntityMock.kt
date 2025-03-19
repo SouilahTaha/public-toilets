@@ -10,8 +10,23 @@ internal val DefaultToiletEntityMock = ToiletEntity(
   address = "address1",
   name = "gestionnaire1",
   schedule = "24/7",
-  isAccessible = "yes",
+  isAccessible = "oui",
   district = 1,
-  babyArea = "yes"
+  babyArea = "oui"
+)
+internal val NonAccessibleToiletEntityMock = ToiletEntity(
+  id = "2",
+  latitude = 3.0,
+  longitude = 4.0,
+  address = "address2",
+  name = "gestionnaire2",
+  schedule = "8am-6pm",
+  isAccessible = "no",
+  district = 2,
+  babyArea = "no"
 )
 
+internal val ToiletEntitiesMock = listOf(
+  DefaultToiletEntityMock,
+  NonAccessibleToiletEntityMock
+)
