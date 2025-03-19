@@ -8,7 +8,7 @@
   <string name="toilets_title">Public toilets in Paris</string>
   <string name="toilets_list_tab_label">List</string>
   <string name="toilets_map_tab_label">Map</string>
-  <string name="toilets_location_permission_denied_error_text">Location permission denied</string>
+  <string name="toilets_location_permission_unavailable_error_text">User location unavailable</string>
   <string name="toilets_your_position_title">Your position</string>
   <string name="toilets_your_position_description">You are here</string>
   <string name="toilets_empty_list_illustration">empty list illustration</string>

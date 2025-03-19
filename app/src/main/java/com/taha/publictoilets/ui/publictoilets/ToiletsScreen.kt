@@ -1,8 +1,5 @@
 package com.taha.publictoilets.ui.publictoilets
 
-import ToiletsUiEvent
-import ToiletsUiState
-import ViewType
 import android.Manifest
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -87,7 +84,7 @@ internal fun ToiletsScreen(
       } else {
         Toast.makeText(
           /* context = */context,
-          /* text = */context.getString(R.string.toilets_location_permission_denied_error_text),
+          /* text = */context.getString(R.string.toilets_location_permission_unavailable_error_text),
           /* duration = */Toast.LENGTH_SHORT
         ).show()
       }
@@ -148,13 +145,9 @@ private fun handleToiletsUiEvent(
   toiletsUiEvent: ToiletsUiEvent,
   onToiletClick: (String) -> Unit
 ) {
-  when (toiletsUiEvent) {
-    is ToiletsUiEvent.NavigateToToiletDetails -> {
+  if (toiletsUiEvent is ToiletsUiEvent.NavigateToToiletDetails) (
       onToiletClick(toiletsUiEvent.toiletId)
-    }
-
-    else -> {}
-  }
+      )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

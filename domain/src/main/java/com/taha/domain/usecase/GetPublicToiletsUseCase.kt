@@ -14,7 +14,7 @@ class GetPublicToiletsUseCase @Inject constructor(
   suspend operator fun invoke(
     page: Int = DEFAULT_PAGE,
     pageSize: Int = DEFAULT_SIZE
-  ) = repository.getPublicToilets(
+  ) = repository.getToilets(
       start = page * pageSize,
       rows = pageSize
     )

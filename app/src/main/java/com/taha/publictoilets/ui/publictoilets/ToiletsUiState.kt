@@ -1,3 +1,5 @@
+package com.taha.publictoilets.ui.publictoilets
+
 import androidx.annotation.StringRes
 import com.google.android.gms.maps.model.LatLng
 import com.taha.publictoilets.R
@@ -15,7 +17,7 @@ sealed class ToiletsUiState {
   ) : ToiletsUiState()
 }
 
-enum class ViewType(@StringRes val stringRes:  Int) {
+enum class ViewType(@StringRes val stringRes: Int) {
   LIST(R.string.toilets_list_tab_label),
   MAP(R.string.toilets_map_tab_label)
 }
