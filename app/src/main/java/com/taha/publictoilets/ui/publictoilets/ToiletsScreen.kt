@@ -87,7 +87,7 @@ internal fun ToiletsScreen(
       } else {
         Toast.makeText(
           /* context = */context,
-          /* text = */context.getString(R.string.toilets_location_permission_denied_error_text),
+          /* text = */context.getString(R.string.toilets_location_permission_unavailable_error_text),
           /* duration = */Toast.LENGTH_SHORT
         ).show()
       }
