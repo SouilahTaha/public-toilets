@@ -31,6 +31,3 @@ val ToiletEntitiesMock = listOf(
   DefaultToiletEntityMock,
   NonAccessibleToiletEntityMock
 )
-
-val ToiletDetailsEntitiesMock = listOf(DefaultToiletEntityMock)
-val EmptyToiletDetailsEntitiesMock = emptyList<ToiletEntity>()

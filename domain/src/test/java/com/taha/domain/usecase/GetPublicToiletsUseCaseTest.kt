@@ -26,7 +26,7 @@ class GetPublicToiletsUseCaseTest {
   }
 
   @Test
-  fun `invoke with default parameters success`() = runTest {
+  fun `GetPublicToiletsUseCase called with default parameters should return success when repository returns success`() = runTest {
     val expectedEntities = ToiletEntitiesMock
     coEvery { repository.getToilets(start = 0, rows = 10) } returns Result.success(expectedEntities)
 
@@ -37,7 +37,7 @@ class GetPublicToiletsUseCaseTest {
   }
 
   @Test
-  fun `invoke with custom parameters success`() = runTest {
+  fun `GetPublicToiletsUseCase called with custom parameters should return success when repository returns success`() = runTest {
     val page = 2
     val pageSize = 20
     coEvery { repository.getToilets(start = 40, rows = 20) } returns Result.success(ToiletEntitiesMock)
@@ -49,7 +49,7 @@ class GetPublicToiletsUseCaseTest {
   }
 
   @Test
-  fun `invoke failure`() = runTest {
+  fun `GetPublicToiletsUseCase should return result failure with exception when repository return failure`() = runTest {
     val exception = Exception("Repository error")
     coEvery { repository.getToilets(start = 0, rows = 10) } returns Result.failure(exception)
 
