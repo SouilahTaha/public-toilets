@@ -1,0 +1,4 @@
+<resources>
+  <string name="error_retry">An error has occurred. Please try again later.</string>
+  <string name="retry_icon_description">@string/error_retry</string>
+</resources>

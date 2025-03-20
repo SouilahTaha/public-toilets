@@ -1,10 +1,13 @@
 package com.taha.domain.usecase
 
+import com.taha.domain.entities.ToiletEntity
+import com.taha.domain.repository.LocationRepository
 import com.taha.domain.repository.PublicToiletsRepository
 import javax.inject.Inject
 
 class GetPublicToiletsUseCase @Inject constructor(
-  private val repository: PublicToiletsRepository
+  private val toiletRepository: PublicToiletsRepository,
+  private val locationRepository: LocationRepository
 ) {
   companion object {
     private const val DEFAULT_PAGE = 0
@@ -14,8 +17,19 @@ class GetPublicToiletsUseCase @Inject constructor(
   suspend operator fun invoke(
     page: Int = DEFAULT_PAGE,
     pageSize: Int = DEFAULT_SIZE
-  ) = repository.getToilets(
-      start = page * pageSize,
-      rows = pageSize
-    )
+  ): Result<List<ToiletEntity>> {
+    val toiletsResult = toiletRepository.getToilets(page, pageSize)
+    val userLocation = locationRepository.getUserLocation()
+    return when {
+      toiletsResult.isSuccess -> {
+        val toiletsWithDistance = toiletsResult.getOrThrow().map { toilet ->
+          toilet.copy(userLatitude = userLocation?.first, userLongitude = userLocation?.second)
+        }
+        Result.success(toiletsWithDistance)
+      }
+
+      toiletsResult.isFailure -> toiletsResult
+      else -> Result.failure(Exception("can't get user location"))
+    }
+  }
 }

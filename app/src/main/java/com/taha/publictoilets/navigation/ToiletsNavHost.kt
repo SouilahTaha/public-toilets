@@ -2,31 +2,25 @@ package com.taha.publictoilets.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_ID_KEY
-import com.taha.publictoilets.ui.publictoilets.ToiletsScreen
-import com.taha.publictoilets.ui.publictoilets.details.ToiletDetailsScreen
+import com.taha.publictoilets.feature.details.ToiletDetailsScreen
+import com.taha.publictoilets.feature.toilets.ToiletsScreen
 
 @Composable
 fun ProjectsNavHost(navController: NavHostController = rememberNavController()) =
   NavHost(
     navController = navController,
-    startDestination = Screen.ToiletsScreen.route
+    startDestination = Screen.ToiletsScreen
   ) {
-    composable(route = Screen.ToiletsScreen.route) {
+    composable<Screen.ToiletsScreen> {
       ToiletsScreen(
         onToiletClick = { toiletId ->
-          navController.navigate(Screen.ToiletDetailsScreen.createRoute(toiletId))
+          navController.navigate(Screen.ToiletDetailsScreen(toiletId))
         })
     }
-    composable(
-      route = Screen.ToiletDetailsScreen.route,
-      arguments = listOf(navArgument(name = TOILET_ID_KEY) { type = NavType.StringType })
-    ) {
+    composable<Screen.ToiletDetailsScreen> {
       ToiletDetailsScreen(
         navigateToBack = { navController.popBackStack() }
       )
