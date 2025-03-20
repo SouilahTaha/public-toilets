@@ -17,11 +17,12 @@ internal fun Context.openMap(latitude: Double, longitude: Double) {
   startActivity(intent)
 }
 
-internal fun Context.getCurrentLocation( onLocation: (Location) -> Unit) {
+internal fun Context.getCurrentLocation(onLocation: (Location) -> Unit) {
   val fusedLocationClient: FusedLocationProviderClient =
     LocationServices.getFusedLocationProviderClient(this)
   try {
-    fusedLocationClient.lastLocation
+    fusedLocationClient
+      .lastLocation
       .addOnSuccessListener { location: Location? ->
         location?.let(onLocation)
       }

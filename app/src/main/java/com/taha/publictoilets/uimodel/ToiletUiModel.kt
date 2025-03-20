@@ -10,4 +10,5 @@ data class ToiletUiModel(
   val isPrmAccessible: Boolean,
   val babyArea: Boolean,
   val location: LatLng,
+  val distance: Float? = null
 )
