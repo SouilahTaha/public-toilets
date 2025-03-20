@@ -25,8 +25,13 @@ class ToiletDetailsViewModel @Inject constructor(
   internal fun getToiletDetailsUiState(): StateFlow<ToiletDetailsUiState> = publicToiletDetailsUiState.asStateFlow()
 
   init {
-    savedStateHandle.getStateFlow(TOILET_ID_KEY, "").value.run {
+    savedStateHandle.getStateFlow<String?>(
+      key = TOILET_ID_KEY,
+      initialValue = null
+    ).value?.run {
       getToilets(this)
+    } ?: run {
+      publicToiletDetailsUiState.value = ToiletDetailsUiState.Error
     }
   }
 

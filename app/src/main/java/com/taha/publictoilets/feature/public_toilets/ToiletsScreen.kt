@@ -56,6 +56,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 private const val LOAD_MORE_THRESHOLD = 2
+private const val DEFAULT_VISIBLE_ITEM_POSITION = 0
+
 
 @Composable
 internal fun ToiletsScreen(
@@ -240,7 +242,7 @@ private fun ToiletListMode(
     derivedStateOf {
       val layoutInfo = listState.layoutInfo
       val totalItemsNumber = layoutInfo.totalItemsCount
-      val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+      val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: DEFAULT_VISIBLE_ITEM_POSITION) + 1
 
       lastVisibleItemIndex > (totalItemsNumber - LOAD_MORE_THRESHOLD)
     }

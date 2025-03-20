@@ -58,6 +58,17 @@ class ToiletDetailsViewModelTest {
   }
 
   @Test
+  fun `ViewModel should return error state when toiletId is null`() = runTest {
+    savedStateHandle[NavigationConstants.TOILET_ID_KEY] = null
+
+    viewModel = ToiletDetailsViewModel(getToiletDetailsUseCase, savedStateHandle)
+    advanceUntilIdle()
+
+    val uiState = viewModel.getToiletDetailsUiState().first()
+    assertEquals(ToiletDetailsUiState.Error, uiState)
+  }
+
+  @Test
   fun `ViewModel should return failure state with valid toiletId after initialization when getToiletDetailsUseCase returns failure`() = runTest {
     val toiletId = "1"
     savedStateHandle[NavigationConstants.TOILET_ID_KEY] = toiletId
