@@ -4,7 +4,7 @@ import ToiletDetailsUiState
 import androidx.lifecycle.SavedStateHandle
 import com.taha.domain.usecase.GetToiletDetailsUseCase
 import com.taha.publictoilets.mock.DefaultToiletEntityMock
-import com.taha.publictoilets.navigation.ToiletDetailsScreen
+import com.taha.publictoilets.navigation.Screen.ToiletDetailsScreen
 import com.taha.publictoilets.test_utils.mockkToRoute
 import com.taha.publictoilets.uimodel.mapper.toPublicToiletUiModel
 import io.mockk.coEvery

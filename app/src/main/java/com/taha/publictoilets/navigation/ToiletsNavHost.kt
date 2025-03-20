@@ -12,15 +12,15 @@ import com.taha.publictoilets.feature.toilet_details.ToiletDetailsScreen
 fun ProjectsNavHost(navController: NavHostController = rememberNavController()) =
   NavHost(
     navController = navController,
-    startDestination = ToiletsScreen
+    startDestination = Screen.ToiletsScreen
   ) {
-    composable<ToiletsScreen> {
+    composable<Screen.ToiletsScreen> {
       ToiletsScreen(
         onToiletClick = { toiletId ->
-          navController.navigate(ToiletDetailsScreen(toiletId))
+          navController.navigate(Screen.ToiletDetailsScreen(toiletId))
         })
     }
-    composable<ToiletDetailsScreen> {
+    composable<Screen.ToiletDetailsScreen> {
       ToiletDetailsScreen(
         navigateToBack = { navController.popBackStack() }
       )

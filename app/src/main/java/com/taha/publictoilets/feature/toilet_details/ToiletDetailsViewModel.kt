@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.taha.domain.entities.ToiletEntity
 import com.taha.domain.usecase.GetToiletDetailsUseCase
-import com.taha.publictoilets.navigation.ToiletDetailsScreen
+import com.taha.publictoilets.navigation.Screen.ToiletDetailsScreen
 import com.taha.publictoilets.uimodel.mapper.toPublicToiletUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
