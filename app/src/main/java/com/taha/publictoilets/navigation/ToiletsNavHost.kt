@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.taha.publictoilets.feature.public_toilets.ToiletsScreen
+import com.taha.publictoilets.feature.toilet_details.ToiletDetailsScreen
 import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_ID_KEY
-import com.taha.publictoilets.ui.publictoilets.ToiletsScreen
-import com.taha.publictoilets.ui.publictoilets.details.ToiletDetailsScreen
 
 @Composable
 fun ProjectsNavHost(navController: NavHostController = rememberNavController()) =
