@@ -61,7 +61,7 @@ fun ActionButton(
 
 @Preview
 @Composable
-fun ActionButtonPreview() {
+private fun ActionButtonPreview() {
   ActionButton(
     onClick = {},
     icon = Icons.Filled.Add,

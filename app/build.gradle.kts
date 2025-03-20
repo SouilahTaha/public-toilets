@@ -5,6 +5,7 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.compose)
   alias(libs.plugins.ksp)
+  alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -56,13 +57,14 @@ dependencies {
   implementation(libs.hilt.android)
   implementation(libs.play.services.location)
   ksp(libs.hilt.compiler)
+  implementation(libs.navigation.compose)
   implementation(libs.androidx.hilt.navigation.compose)
   implementation(libs.androidx.material3)
   implementation(libs.androidx.material.icons.extended)
   implementation(libs.androidx.ui.tooling.preview.android)
+  implementation(libs.kotlinx.serialization.json)
   implementation(libs.play.services.maps)
   implementation(libs.maps.compose)
-
   testImplementation(libs.junit)
   testImplementation(libs.mockk)
   testImplementation(libs.kotlinx.coroutines.test)

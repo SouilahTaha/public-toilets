@@ -1,12 +1,10 @@
 package com.taha.publictoilets.navigation
 
-import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILETS_SCREEN_ROUTE
-import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_DETAILS_SCREEN_ROUTE
-import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_ID_KEY
+import kotlinx.serialization.Serializable
 
-sealed class Screen(val route: String) {
-  data object ToiletsScreen : Screen(TOILETS_SCREEN_ROUTE)
-  data object ToiletDetailsScreen : Screen("$TOILET_DETAILS_SCREEN_ROUTE/{$TOILET_ID_KEY}") {
-    fun createRoute(toiletId: String) = "$TOILET_DETAILS_SCREEN_ROUTE/$toiletId"
-  }
-}
+
+@Serializable
+object ToiletsScreen
+
+@Serializable
+data class ToiletDetailsScreen(val toiletId: String)

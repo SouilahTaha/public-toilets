@@ -25,4 +25,4 @@ fun Loader() =
 
 @Preview
 @Composable
-fun LoaderPreview() = Loader()
+private fun LoaderPreview() = Loader()

@@ -4,9 +4,10 @@ import ToiletDetailsUiState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.taha.domain.entities.ToiletEntity
 import com.taha.domain.usecase.GetToiletDetailsUseCase
-import com.taha.publictoilets.navigation.NavigationConstants.Companion.TOILET_ID_KEY
+import com.taha.publictoilets.navigation.ToiletDetailsScreen
 import com.taha.publictoilets.uimodel.mapper.toPublicToiletUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,19 +21,13 @@ class ToiletDetailsViewModel @Inject constructor(
   private val getToiletDetailsUseCase: GetToiletDetailsUseCase,
   savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+  private val toiletId = savedStateHandle.toRoute<ToiletDetailsScreen>().toiletId
 
   private val publicToiletDetailsUiState = MutableStateFlow<ToiletDetailsUiState>(ToiletDetailsUiState.Loading)
   internal fun getToiletDetailsUiState(): StateFlow<ToiletDetailsUiState> = publicToiletDetailsUiState.asStateFlow()
 
   init {
-    savedStateHandle.getStateFlow<String?>(
-      key = TOILET_ID_KEY,
-      initialValue = null
-    ).value?.run {
-      getToilets(this)
-    } ?: run {
-      publicToiletDetailsUiState.value = ToiletDetailsUiState.Error
-    }
+    getToilets(toiletId)
   }
 
   private fun getToilets(toiletID: String) {

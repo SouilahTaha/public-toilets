@@ -46,7 +46,7 @@ fun ToolbarWithTitle(
 
 @Preview
 @Composable
-fun ToolbarWithTitlePreview() = ToolbarWithTitle(
+private fun ToolbarWithTitlePreview() = ToolbarWithTitle(
   title = "My App",
   navigation = {},
   navigationIcon = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") },
@@ -56,7 +56,7 @@ fun ToolbarWithTitlePreview() = ToolbarWithTitle(
 
 @Preview
 @Composable
-fun ToolbarWithTitleNoActionsPreview() = ToolbarWithTitle(
+private fun ToolbarWithTitleNoActionsPreview() = ToolbarWithTitle(
   title = "No Actions",
   navigation = {},
   navigationIcon = { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }

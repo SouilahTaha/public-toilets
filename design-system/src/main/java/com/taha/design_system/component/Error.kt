@@ -46,4 +46,4 @@ fun Error(onRetry: () -> Unit) =
 
 @Preview
 @Composable
-fun ErrorPreview() = Error(onRetry = {})
+private fun ErrorPreview() = Error(onRetry = {})
